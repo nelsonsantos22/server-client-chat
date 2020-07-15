@@ -31,20 +31,22 @@ public class ClientHandler implements Runnable{
             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             String messageIn;
 
-            System.out.println("=== " + Thread.currentThread().getName() + " has connected ===");
+            broadcast(Thread.currentThread().getName() + Message.WELCOME_MESSAGE);
+            //System.out.println("*** " + Thread.currentThread().getName() + " " + clientSocket.getPort() +  " has connected");
 
             while (true) {
 
                 messageIn = in.readLine();
-                System.out.println("this message " + messageIn);
+                //System.out.println("this message " + messageIn);
 
                 if (messageIn == null || messageIn.equals("/quit")) {
-                    System.out.println("=== " + Thread.currentThread().getName() + " disconnected ===");
+                    broadcast(Thread.currentThread().getName() + Message.DISCONNECT_MESSAGE);
+                    //System.out.println("*** " + Thread.currentThread().getName() + " disconnected from the chat");
                     in.close();
                     clientSocket.close();
                     break;
                 }
-                System.out.println(list.size());
+                //System.out.println(list.size());
 
                 broadcast(messageIn);
                 System.out.println(Thread.currentThread().getName() + ": " + messageIn);
@@ -65,7 +67,7 @@ public class ClientHandler implements Runnable{
     public void broadcast(String response){
 
         for (ClientHandler client : list){
-            client.out.println(response);
+            client.out.println("<" + Thread.currentThread().getName() + "> " + response);
         }
     }
 

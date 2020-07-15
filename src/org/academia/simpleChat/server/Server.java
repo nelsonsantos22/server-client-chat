@@ -3,6 +3,7 @@ package org.academia.simpleChat.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -22,8 +23,6 @@ public class Server {
 
         int portNumber = 8081;
 
-
-
         try{
 
             ServerSocket serverSocket = new ServerSocket(portNumber);
@@ -40,6 +39,10 @@ public class Server {
                 list.add(clientHandler);
 
             }
+
+        } catch (SocketException e){
+
+            System.err.println("USER FORCED OUT");
 
         } catch (IOException exception) {
 

@@ -3,6 +3,9 @@ package org.academia.simpleChat.client;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketException;
+
+import static java.lang.Thread.currentThread;
 
 public class ClientLauncher {
 
@@ -25,31 +28,39 @@ public class ClientLauncher {
 
             ServerHandler serverHandler = new ServerHandler(clientSocket);
 
-            while(!messageOut.equals("/quit")) {
+            while (true/*!messageOut.equals("/quit")*/) {
+
 
                 new Thread(serverHandler).start();
 
+
                 messageIn = in.readLine();
-                System.out.println(messageIn);
+
+
+                //System.out.println(currentThread().getName() + ": " + messageIn);
 
                 //serverHandler.run();
 
                 out.write(messageIn + "\n");
                 out.flush();
 
+                if (messageIn.equals("/quit")) {
+                    in.close();
+                    clientSocket.close();
+                    return;
+                    //break;
+                }
+                messageIn = "";
             }
 
-            clientSocket.close();
+            //clientSocket.close();
 
         } catch (IOException exception) {
 
             exception.printStackTrace();
 
-        } finally {
-
-
-
         }
 
     }
+
 }

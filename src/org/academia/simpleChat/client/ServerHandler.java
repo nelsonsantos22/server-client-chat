@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
+import java.util.spi.AbstractResourceBundleProvider;
 
 public class ServerHandler implements Runnable {
 
@@ -27,9 +29,19 @@ public class ServerHandler implements Runnable {
                 while (true) {
 
                     chatMessage = serverIn.readLine();
+
                     System.out.println(chatMessage);
 
                 }
+
+            } catch (SocketException e){
+
+                System.err.println("DISCONNECTED " + e.getMessage());
+
+                //return;
+                //e.printStackTrace();
+
+
             } catch (IOException e) {
 
                 e.printStackTrace();
